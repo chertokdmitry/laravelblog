@@ -1,0 +1,15 @@
+@extends('admin.main')
+
+@section('content')
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Панель управления</h1>
+
+</div>
+<ul>
+    <li>Статьи</li>
+    <li>Категории</li>
+    <li>Комментарии</li>
+</ul>
+
+@endsection
