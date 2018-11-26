@@ -20,6 +20,27 @@
             </div>
         </div>
     </div>
+    @isset ($featured_articles)
+    <div class="container">
+        <div class="row mb-2">
+        @foreach ($featured_articles as $article)
+                <div class="col-md-6">
+                    <div class="card flex-md-row mb-4 shadow-sm h-md-250">
+                        <div class="card-body d-flex flex-column align-items-start">
+                            <h4><span class="badge badge-info">{{ $article->category->title }}</span></h4>
+                            <img class="card-img-top" src="/public/photos/{{ $article['url'] }}" alt="" style="max-width:180px;">
+                            <div class="mb-1 text-muted">{{ $article->created_at->format('d-m-Y') }}</div>
+                            <p class="card-text mb-auto">{{ $article['title'] }}</p>
+                            <a href="/art/{{ $article['id'] }}">Подробнее</a>
+                        </div>
+
+                    </div>
+                </div>
+        @endforeach
+        </div>
+    </div>
+    @endisset
+
     <main role="main" class="container">
         <div class="row">
             <div class="col-md-8 blog-main">
@@ -32,8 +53,7 @@
                         <h4><span class="badge badge-info">{{ $article->category->title }}</span></h4>
                         <img class="card-img-top" src="/public/photos/{{ $article['url'] }}">
                         <h2 class="blog-post-title">{{ $article['title'] }}</h2>
-                        <p class="blog-post-meta">{{ $article->created_at->format('d-m-Y') }} by Dmitry</p>
-
+                        <p class="blog-post-meta">{{ $article->created_at->format('d-m-Y') }}, автор Dmitry. Комментарии ({{ $comment_count[$article['id']] }})</p>
                         <p>{{ $article['content'] }}</p>
                         <a href="/art/{{ $article['id'] }}">Подробнее</a>
                     </div><!-- /.blog-post -->
@@ -77,10 +97,9 @@
 
     </main><!-- /.container -->
 
-    <footer class="blog-footer">
 
         <p>
-            <a href="#">Back to top</a>
+            <a href="#" class="btn btn-secondary btn-lg btn-block">Наверх</a>
         </p>
-    </footer>
+
 @endsection

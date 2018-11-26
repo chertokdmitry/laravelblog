@@ -6,6 +6,7 @@ use App\Models\Article;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
 
 class ArticleResource extends Controller
 {
@@ -43,6 +44,8 @@ class ArticleResource extends Controller
      */
     public function store(Request $request)
     {
+        Cache::flush();
+
         $photoName = time().'.'.$request->userfile->getClientOriginalExtension();
         $request->userfile->move(public_path('photos'), $photoName);
 

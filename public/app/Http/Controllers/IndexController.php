@@ -8,7 +8,6 @@ use App\Models\Article;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Cache;
 
-
 class IndexController extends Controller
 {
     public $categories;
@@ -36,13 +35,20 @@ class IndexController extends Controller
 
     public function index()
     {
-        $articles = Cache::remember('articles', 60, function () {
+        $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+
+        $articles = Cache::remember('articles-page-' . $currentPage, 60, function () {
             return Article::with('category')->paginate(6);
+        });
+
+        $featuredArticles = Cache::remember('featured', 60, function () {
+            return Article::with('category')->where('featured', 1)->get();
         });
 
         $view = view('main', ['categories' => $this->categories,
             'articles' => $articles,
-            'comment_count' => $this->commentCount])->render();
+            'comment_count' => $this->commentCount,
+            'featured_articles' => $featuredArticles])->render();
 
         return (new Response($view));
     }
@@ -64,16 +70,14 @@ class IndexController extends Controller
     public function created($month, $year)
     {
         $cacheKey = 'date' . $year . $month;
-        Cache::flush();
 
-
-
-            $articles = Article::with('category')
+        $articles = Cache::remember($cacheKey, 60, function () use($month, $year){
+            return Article::with('category')
                 ->whereMonth('created_at', '=', date($month))
                 ->whereYear('created_at', '=', date($year))
                 ->paginate(6);
+        });
 
-//            dump($articles);
 
         $view = view('main', ['categories' => $this->categories,
             'articles' => $articles,

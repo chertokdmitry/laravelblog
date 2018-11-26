@@ -27,21 +27,61 @@
     </main>
 
     <div class="container">
-        <h3 class="pb-3 mb-4 font-italic border-bottom">
-            Комментарии
-        </h3>
-    @foreach ($comments as $comment)
-            <div class="card" style="margin-top:20px;">
-                <div class="card-body">
-                    <blockquote class="blockquote mb-0">
-                        <p>{{ $comment['text'] }}</p>
-                        <footer class="blockquote-footer">{{ $comment['name'] }}
-                            <cite title="Source Title">{{ $comment['email'] }}</cite>
-                        </footer>
-                    </blockquote>
-                </div>
+        <div class="row">
+            <div class="col">
+                <h4 class="pb-3 mb-4 font-italic border-bottom">
+                    Комментарии
+                </h4>
+                @foreach ($comments as $comment)
+                    <div class="card" style="margin-top:20px;">
+                        <div class="card-body">
+                            <blockquote class="blockquote mb-0">
+                                <p>{{ $comment['text'] }}</p>
+                                <footer class="blockquote-footer">{{ $comment['name'] }}
+                                     <cite title="Source Title">{{ $comment['email'] }}</cite>
+                                </footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                @endforeach
+                <br><br><br>
             </div>
-    @endforeach
-        <br><br><br>
+            <div class="col">
+                <h4 class="pb-3 mb-4 font-italic border-bottom">
+                    Оставить комментарий
+                </h4>
+                <form action="#" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <label for="title">Имя</label>
+                    <input type="text"
+                           class="form-control"
+                           id="title"
+                           name="title"
+                           placeholder=" Имя">
+                    <br><br>
+                    <label for="email">Email</label>
+                    <input type="text"
+                           class="form-control"
+                           id="email"
+                           name="email"
+                           placeholder=" Email">
+                    <br><br>
+                    <label for="fulltext">Текст</label>
+                    <textarea rows="4" cols="50"
+                              class="form-control"
+                              id="fulltext"
+                              name="fulltext"
+                              placeholder=" Текст">
+
+                    </textarea>
+                    <br><br>
+                    <a href="#" class="btn btn-primary disabled">Добавить</a>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <p>
+        <a href="#" class="btn btn-secondary btn-lg btn-block">Наверх</a>
+    </p>
 @endsection

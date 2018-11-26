@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryResource extends Controller
 {
@@ -40,6 +41,8 @@ class CategoryResource extends Controller
      */
     public function store(Request $request)
     {
+        Cache::flush();
+
         $item = new Category;
         $item->title = $request->title;
         $item->save();

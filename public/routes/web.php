@@ -25,3 +25,4 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home')->middleware('auth');
 Route::resource('/article', 'Admin\ArticleResource')->middleware('auth');
 Route::resource('/category', 'Admin\CategoryResource')->middleware('auth');
+Route::get('/comments', 'Admin\CommentsController@index')->middleware('auth');
