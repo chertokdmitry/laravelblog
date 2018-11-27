@@ -17,33 +17,58 @@ class IndexController extends Controller
     {
         $this->categories = Category::all();
 
-        $this->commentCount = Cache::remember('commentCount', 60, function () {
-            $comments = Comment::all();
-            $groupedComments = $comments->groupBy('article_id');
-            $groupedComments->toArray();
+        $this->commentCount =  self::cache('commentCount', "commentCount");
+    }
 
-            foreach ($groupedComments as $comment) {
+    public static function commentCount()
+    {
+        $comments = Comment::all();
+        $groupedComments = $comments->groupBy('article_id');
+        $groupedComments->toArray();
 
-                $comment->count();
-                $articleId = $comment->first()->article_id;
-                $commentCount[$articleId] = $comment->count();
-            }
+        foreach ($groupedComments as $comment) {
 
-            return $commentCount;
+            $comment->count();
+            $articleId = $comment->first()->article_id;
+            $commentCount[$articleId] = $comment->count();
+        }
+
+        return $commentCount;
+    }
+
+    public static function get_method($object, $method){
+        return function() use($object, $method){
+            $args = func_get_args();
+            return call_user_func_array(array($object, $method), $args);
+        };
+    }
+
+    public static function cache($key, $method){
+
+        $data = Cache::remember($key, 60, function () use ($method) {
+            return self::$method();
         });
+
+        return $data;
+    }
+
+    public static function getArticles()
+    {
+        return Article::with('category')->paginate(6);
+    }
+
+    public static function getFeaturedArticles()
+    {
+        return Article::with('category')->where('featured', 1)->get();
     }
 
     public function index()
     {
         $currentPage = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $key = 'articles-page-' . $currentPage;
+        $articles =  self::cache($key, "getArticles");
 
-        $articles = Cache::remember('articles-page-' . $currentPage, 60, function () {
-            return Article::with('category')->paginate(6);
-        });
-
-        $featuredArticles = Cache::remember('featured', 60, function () {
-            return Article::with('category')->where('featured', 1)->get();
-        });
+        $featuredArticles =  self::cache('featured', "getFeaturedArticles");
 
         $view = view('main', ['categories' => $this->categories,
             'articles' => $articles,

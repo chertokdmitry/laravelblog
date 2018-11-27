@@ -10,7 +10,7 @@ class CommentsController extends Controller
 {
     public function index()
     {
-        $items = Comment::paginate(20);
+        $items = Comment::paginate(env("COMMENTS_PER_PAGE"));
 
         $view = view('admin/comments', ['items' => $items])->render();
         return (new Response($view));
