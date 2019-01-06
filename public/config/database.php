@@ -54,6 +54,17 @@ return [
             'engine' => null,
         ],
 
+        'mysql2' => [
+            'driver'    => 'mysql',
+            'host'      => '178.250.242.26',
+            'database'  => 'blog_loc',
+            'username'  => 'newuser',
+            'password'  => 'Docker1703',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),

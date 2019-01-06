@@ -114,6 +114,7 @@ class IndexController extends Controller
     public function article($id)
     {
         $article = Article::find($id);
+
         $comments = Comment::where('article_id', $id)->get();
 
         $view = view('article', ['categories' => $this->categories, 'article' => $article, 'comments' => $comments])->render();
